@@ -1,37 +1,49 @@
-import { createServerClient } from "@supabase/ssr"
+import { createServerClient as createSupabaseServerClient } from "@supabase/ssr"
 import { cookies } from "next/headers"
 import { Database } from "@/lib/supabase/database.types"
 
-type TypedSupabaseClient = ReturnType<typeof createServerClient<Database>>
+type TypedSupabaseClient = ReturnType<typeof createSupabaseServerClient<Database>>
 
-export async function createClient(): Promise<TypedSupabaseClient> {
+export function createClient(): TypedSupabaseClient {
   const cookieStore = cookies()
   
-  return createServerClient<Database>(
+  // Create a simple cookie store that matches the expected interface
+  const cookieStoreWrapper = {
+    get: (name: string) => {
+      const cookie = cookieStore.get(name)
+      return cookie?.value
+    },
+    set: (name: string, value: string, options: any) => {
+      try {
+        cookieStore.set({ name, value, ...options })
+      } catch (error) {
+        console.error('Error setting cookie:', error)
+      }
+    },
+    remove: (name: string, options: any) => {
+      try {
+        cookieStore.set({ name, value: '', ...options })
+      } catch (error) {
+        console.error('Error removing cookie:', error)
+      }
+    }
+  }
+  
+  return createSupabaseServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(name: string) {
-          return cookieStore.get(name)?.value
+          return cookieStoreWrapper.get(name)
         },
         set(name: string, value: string, options: any) {
-          try {
-            cookieStore.set({ name, value, ...options })
-          } catch (error) {
-            // The `set` method was called from a Server Component
-            // This can be ignored if you have middleware refreshing user sessions
-          }
+          cookieStoreWrapper.set(name, value, options)
         },
         remove(name: string, options: any) {
-          try {
-            cookieStore.set({ name, value: '', ...options })
-          } catch (error) {
-            // The `delete` method was called from a Server Component
-            // This can be ignored if you have middleware refreshing user sessions
-          }
-        },
-      },
+          cookieStoreWrapper.remove(name, options)
+        }
+      }
     }
   )
 }

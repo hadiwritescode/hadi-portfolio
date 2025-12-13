@@ -6,10 +6,15 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "next start",
+    "setup:fonts": "node scripts/setup-fonts.js",
+    "prepare": "npm run setup:fonts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
+    "@fontsource/bebas-neue": "^5.2.7",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
     "@hookform/resolvers": "^3.10.0",
     "@nuxt/kit": "latest",
     "@radix-ui/react-accordion": "1.2.2",
@@ -55,6 +60,7 @@
     "lucide-react": "^0.454.0",
     "next": "16.0.10",
     "next-themes": "^0.4.6",
+    "node-fetch": "^2.7.0",
     "react": "19.2.0",
     "react-day-picker": "9.8.0",
     "react-dom": "19.2.0",

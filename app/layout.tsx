@@ -1,27 +1,34 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { IBM_Plex_Sans, IBM_Plex_Mono, Bebas_Neue } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SmoothScroll } from "@/components/smooth-scroll"
 import "./globals.css"
 
-const ibmPlexSans = IBM_Plex_Sans({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-ibm-plex-sans",
-})
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ["400", "500"],
-  subsets: ["latin"],
-  variable: "--font-ibm-plex-mono",
-})
-const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], variable: "--font-bebas" })
+// Import fonts from @fontsource
+import '@fontsource/ibm-plex-sans/400.css'
+import '@fontsource/ibm-plex-sans/500.css'
+import '@fontsource/ibm-plex-sans/600.css'
+import '@fontsource/ibm-plex-sans/700.css'
+import '@fontsource/ibm-plex-mono/400.css'
+import '@fontsource/ibm-plex-mono/500.css'
+import '@fontsource/bebas-neue/400.css'
+
+// Font class names
+export const fontClasses = "font-sans antialiased overflow-x-hidden";
 
 export const metadata: Metadata = {
-  title: "Hadi — Full-Stack Developer & Automation Specialist",
-  description:
-    "19-year-old developer from Lahore building web apps & automation in 2-3 days using Next.js, Supabase, and AI-powered development.",
-  generator: "v0.app",
+  title: {
+    default: "Hadi — Full-Stack Developer & Automation Specialist",
+    template: "%s | Hadi's Portfolio"
+  },
+  description: "19-year-old developer from Lahore building web apps & automation in 2-3 days using Next.js, Supabase, and AI-powered development.",
+  generator: "Next.js",
+  applicationName: "Hadi's Portfolio",
+  referrer: "origin-when-cross-origin",
+  keywords: ["Full-Stack Developer", "Web Development", "Automation", "Next.js", "Supabase", "Portfolio"],
+  authors: [{ name: "Hadi", url: "https://hadi.vercel.app" }],
+  creator: "Hadi",
+  publisher: "Hadi",
   icons: {
     icon: [
       {
@@ -47,10 +54,17 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark bg-background">
-      <body
-        className={`${ibmPlexSans.variable} ${bebasNeue.variable} ${ibmPlexMono.variable} font-sans antialiased overflow-x-hidden`}
-      >
+    <html 
+      lang="en" 
+      className="dark bg-background"
+      style={{
+        '--font-ibm-plex-sans': '"IBM Plex Sans", sans-serif',
+        '--font-ibm-plex-mono': '"IBM Plex Mono", monospace',
+        '--font-bebas': '"Bebas Neue", sans-serif'
+      } as any}
+      suppressHydrationWarning
+    >
+      <body className={fontClasses}>
         <div className="noise-overlay" aria-hidden="true" />
         <SmoothScroll>{children}</SmoothScroll>
         <Analytics />

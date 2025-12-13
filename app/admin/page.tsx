@@ -98,7 +98,6 @@ export default async function AdminDashboard() {
         </Card>
       </div>
 
-      {/* Recent Activity Section */}
       <div className="mt-8">
         <h2 className="mb-4 text-xl font-semibold">Recent Activity</h2>
         <Card>

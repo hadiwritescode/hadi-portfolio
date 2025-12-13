@@ -24,11 +24,27 @@ export default function Page() {
     setError(null)
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      // Sign in with email and password
+      const { data: { user }, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
+      
       if (error) throw error
+      
+      // Verify user is an admin
+      const { data: adminData, error: adminError } = await supabase
+        .from('admin_profiles')
+        .select('id')
+        .eq('id', user?.id)
+        .single()
+        
+      if (adminError || !adminData) {
+        await supabase.auth.signOut()
+        throw new Error('You do not have admin access')
+      }
+      
+      // Redirect to admin dashboard
       router.push("/admin")
       router.refresh()
     } catch (error: unknown) {

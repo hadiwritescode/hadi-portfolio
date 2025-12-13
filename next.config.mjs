@@ -8,7 +8,7 @@ const nextConfig = {
     unoptimized: true,
     domains: [
       'localhost',
-      'your-supabase-url.supabase.co', // Add your Supabase URL here
+      'lprpfubiwmknzxjjtdqw.supabase.co', // Add your Supabase URL here
     ],
   },
   experimental: {
